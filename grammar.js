@@ -1,8 +1,8 @@
 // official grammar referrence
 // https://github.com/baskerville/sxhkd/blob/master/doc/sxhkd.1.asciidoc#configuration
 
-// let hotkey_regex = /[A-Za-z0-9]+/
-let hotkey_regex = /[A-Za-z0-9_]+/
+let regex_keysym = /[A-Za-z0-9_]+/
+let regext_range_digit = /[A-Za-z0-9]/
 
 module.exports = grammar({
   name: 'sxhkdrc',
@@ -45,7 +45,7 @@ module.exports = grammar({
       $.range,
     )),
 
-    modifier: $ => choice(
+    modifier: _ => choice(
       'super',
       'hyper',
       'meta',
@@ -62,22 +62,16 @@ module.exports = grammar({
       'mod5',
       'any',
     ),
-    operator: $ => '+',
-    attribute: $ => choice('@', '~'),
-    punctuation: $ => choice('{', ',', '}'),
-    delimiter: $ => choice(';', ':'),
-    command_sync_prefix: $ => ';',
-    keysym: $ => hotkey_regex,
-    range: $ => token(
-      seq(
-        /[A-Za-z0-9]/,
-        '-',
-        /[A-Za-z0-9]/,
-      )
-    ),
-    comment: $ => token(prec(-10, /#.*/)),
+    operator: _ => '+',
+    attribute: _ => choice('@', '~'),
+    punctuation: _ => choice('{', ',', '}'),
+    delimiter: _ => choice(';', ':'),
+    command_sync_prefix: _ => ';',
+    keysym: _ => regex_keysym,
+    range: _ => token(seq(regext_range_digit, '-', regext_range_digit)),
+    comment: _ => token(prec(-10, /#.*/)),
 
-    command: $ => seq(
+    command: _ => seq(
       repeat(/[^;].*\\\n\s+/),
       /[^;].*/,
     ),
