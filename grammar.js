@@ -22,14 +22,27 @@ module.exports = grammar({
     binding: $ => seq(
       $.hotkey,
       '\n',
+      /\s+/,
+      optional($.command_sync_prefix),
       $.command,
+      '\n'
     ),
 
-    hotkey: $ => repeat1(choice(
+    hotkey: $ => seq(
+      repeat(seq(
+        $._hotkey,
+        '\\\n'
+      )),
+      $._hotkey,
+    ),
+    _hotkey: $ => repeat1(choice(
       $.modifier,
       $.operator,
       $.punctuation,
+      $.attribute,
+      $.delimiter,
       $.keysym,
+      $.range,
     )),
 
     modifier: $ => choice(
@@ -47,34 +60,26 @@ module.exports = grammar({
       'mod3',
       'mod4',
       'mod5',
-      'any'
+      'any',
     ),
-    operator: $ => choice('+', '-', ':', '~'),
+    operator: $ => '+',
+    attribute: $ => choice('@', '~'),
     punctuation: $ => choice('{', ',', '}'),
-    // keysym: $ => prec(-10, hotkey_regex),
+    delimiter: $ => choice(';', ':'),
+    command_sync_prefix: $ => ';',
     keysym: $ => hotkey_regex,
+    range: $ => token(
+      seq(
+        /[A-Za-z0-9]/,
+        '-',
+        /[A-Za-z0-9]/,
+      )
+    ),
     comment: $ => token(prec(-10, /#.*/)),
-    command: $ => token(prec(-10, /.*\n/)),
 
-    // clauses e.g. M{an,oon}
-    // clause_segment: $ => hotkey_regex,
-    // pre_clause_segment: $ => alias($.clause_segment, 'pre_clause_segment'),
-    // post_clause_segment: $ => token.immediate(hotkey_regex),
-
-    // clause: $ => seq(
-    //   optional($.pre_clause_segment),
-    //   '{',
-    //   $.clause_segment,
-    //   repeat1(seq(',', $.clause_segment)),
-    //   '}',
-    //   optional($.post_clause_segment),
-    // ),
-
-    // internal_clause: $ => token.immediate(seq(
-    //   '{',
-    //   $.keysym,
-    //   repeat(seq(',', $.keysym)),
-    //   '}',
-    // )),
+    command: $ => seq(
+      repeat(/[^;].*\\\n\s+/),
+      /[^;].*/,
+    ),
   }
 });

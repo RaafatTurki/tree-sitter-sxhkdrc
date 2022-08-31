@@ -1,5 +1,10 @@
 [
   {
+    "type": "attribute",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "binding",
     "named": true,
     "fields": {},
@@ -12,11 +17,30 @@
           "named": true
         },
         {
+          "type": "command_sync_prefix",
+          "named": true
+        },
+        {
           "type": "hotkey",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "command",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "command_sync_prefix",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "delimiter",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "hotkey",
@@ -26,6 +50,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "delimiter",
+          "named": true
+        },
         {
           "type": "keysym",
           "named": true
@@ -41,17 +73,16 @@
         {
           "type": "punctuation",
           "named": true
+        },
+        {
+          "type": "range",
+          "named": true
         }
       ]
     }
   },
   {
     "type": "modifier",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "operator",
     "named": true,
     "fields": {}
   },
@@ -80,19 +111,23 @@
     "named": false
   },
   {
-    "type": "+",
-    "named": false
-  },
-  {
     "type": ",",
     "named": false
   },
   {
-    "type": "-",
+    "type": ":",
     "named": false
   },
   {
-    "type": ":",
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "@",
+    "named": false
+  },
+  {
+    "type": "\\\n",
     "named": false
   },
   {
@@ -102,10 +137,6 @@
   {
     "type": "any",
     "named": false
-  },
-  {
-    "type": "command",
-    "named": true
   },
   {
     "type": "comment",
@@ -158,6 +189,14 @@
   {
     "type": "mode_switch",
     "named": false
+  },
+  {
+    "type": "operator",
+    "named": true
+  },
+  {
+    "type": "range",
+    "named": true
   },
   {
     "type": "shift",

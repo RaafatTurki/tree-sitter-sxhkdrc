@@ -29,12 +29,57 @@
           "value": "\n"
         },
         {
+          "type": "PATTERN",
+          "value": "\\s+"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "command_sync_prefix"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "SYMBOL",
           "name": "command"
+        },
+        {
+          "type": "STRING",
+          "value": "\n"
         }
       ]
     },
     "hotkey": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_hotkey"
+              },
+              {
+                "type": "STRING",
+                "value": "\\\n"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_hotkey"
+        }
+      ]
+    },
+    "_hotkey": {
       "type": "REPEAT1",
       "content": {
         "type": "CHOICE",
@@ -53,7 +98,19 @@
           },
           {
             "type": "SYMBOL",
+            "name": "attribute"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "delimiter"
+          },
+          {
+            "type": "SYMBOL",
             "name": "keysym"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "range"
           }
         ]
       }
@@ -124,19 +181,15 @@
       ]
     },
     "operator": {
+      "type": "STRING",
+      "value": "+"
+    },
+    "attribute": {
       "type": "CHOICE",
       "members": [
         {
           "type": "STRING",
-          "value": "+"
-        },
-        {
-          "type": "STRING",
-          "value": "-"
-        },
-        {
-          "type": "STRING",
-          "value": ":"
+          "value": "@"
         },
         {
           "type": "STRING",
@@ -161,9 +214,46 @@
         }
       ]
     },
+    "delimiter": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ";"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        }
+      ]
+    },
+    "command_sync_prefix": {
+      "type": "STRING",
+      "value": ";"
+    },
     "keysym": {
       "type": "PATTERN",
       "value": "[A-Za-z0-9_]+"
+    },
+    "range": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[A-Za-z0-9]"
+          },
+          {
+            "type": "STRING",
+            "value": "-"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[A-Za-z0-9]"
+          }
+        ]
+      }
     },
     "comment": {
       "type": "TOKEN",
@@ -177,15 +267,20 @@
       }
     },
     "command": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": -10,
-        "content": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^;].*\\\\\\n\\s+"
+          }
+        },
+        {
           "type": "PATTERN",
-          "value": ".*\\n"
+          "value": "[^;].*"
         }
-      }
+      ]
     }
   },
   "extras": [
